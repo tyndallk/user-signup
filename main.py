@@ -16,23 +16,33 @@ def signup():
         username = request.form['username']
         email = request.form['email']
         password = request.form ['password']
-        verify = request.form['verify']    
-
-    
-    username_error = ''
-    email_error = ''
-    password_error = ''
-    verify_error = ''
+        verify = request.form['verify']
         
-        else:
-            if len(username) < 3 or len(username) > 20:
-                username_error = 'Username not valid'
-                return render_template('index.html', username_error = username_error)
 
-        return  render_template('welcome.html', username = username)
+        if len(username) < 3 or len(username) > 20:
+            username_error = 'Username not valid'
+            return render_template('index.html', username_error = username_error)
 
-   
+        if len(password) < 3 or len(password) > 20:
+            password_error = 'Password not valid'
+            return render_template('index.html', password_error = password_error)
 
-    
+        if verify == '' or verify != password:
+            verify_error = 'Verify password not valid'
+            return render_template('index.html', verify_error = verify_error)
+
+        if len(email) < 1:
+            return render_template('welcome.html', username = username) 
+        
+        if len(email) < 3 or len(email) > 20:
+           email_error = 'Invalid email'
+           return render_template('index.html', email_error = email_error)
+        
+        if "@" not in email or "." not in email or " " in email:
+            email_error = 'Email must contain no spaces and the following symbols: @ .'
+            return render_template('index.html', email_error = email_error) 
+
+    return render_template('welcome.html', username = username)   
+  
 
 app.run()
